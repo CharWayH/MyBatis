@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?> <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <!--数据库配置信息-->
+    <properties resource="jdbc.properties"/>
+
+    <!--开启二级缓存-->
+    <settings>
+        <setting name="cacheEnabled" value="true"/>
+    </settings>
+
+    <!--类起别名-->
+    <typeAliases>
+        <!--给单独的实体起别名-->
+        <!--<typeAlias type="com.lagou.pojo.User" alias="user"/>-->
+        <!--批量起别名:该包下的所有类名为别名，不区分大小写-->
+        <package name="com.lagou.pojo"/>
+    </typeAliases>
+
+    <!--配置插件-->
+    <plugins>
+        <!--<plugin interceptor="com.lagou.plugin.MyPlugin">-->
+            <!--<property name="name" value="tom"/>-->
+        <!--</plugin>-->
+        <!--分页插件-->
+        <plugin interceptor="com.github.pagehelper.PageHelper">
+            <property name="dialect" value="mysql"/>
+        </plugin>
+        <!--通用Mapper插件-->
+        <plugin interceptor="tk.mybatis.mapper.mapperhelper.MapperInterceptor">
+            <!--指定当前通用Mapper接口使用的是哪一个-->
+            <property name="mappers" value="tk.mybatis.mapper.common.Mapper"/>
+        </plugin>
+    </plugins>
+    
+    <!--运行环境-->
+    <environments default="development">
+        <environment id="development">
+            <!--事务管理
+                JDBC：事务交由JDBC进行管理-->
+            <transactionManager type="JDBC"/>
+            <!--数据源
+                POOLED：mybatis提供的连接池-->
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.driver}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.username}"/>
+                <property name="password" value="${jdbc.password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!--引入映射配置文件-->
+    <mappers>
+        <!--<mapper resource="IOrderMapper.xml"/>-->
+        <!--<mapper resource="IUserMapper.xml"/>-->
+        <!--扫描包路径下的所有实体类-->
+        <package name="com.lagou.mapper"/>
+        <!--扫描指定类-->
+        <!--<mapper class="com.lagou.mapper.IUserMapper"/>-->
+    </mappers>
+</configuration>

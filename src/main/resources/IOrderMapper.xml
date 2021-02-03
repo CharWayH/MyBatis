@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?> <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间，与id组成sql的唯一标识-->
+<mapper namespace="com.lagou.mapper.IOrderMapper">
+
+    <!--id:resultMap的名称
+        type:为resultMap的类型
+        associtation:包含的类
+    -->
+    <resultMap id="orderMap" type="order">
+        <result property="id" column="id"/>
+        <result property="orderTime" column="orderTime"/>
+        <result property="total" column="total"/>
+        <association property="user" javaType="user">
+            <result property="id" column="uid"/>
+            <result property="username" column="username"/>
+        </association>
+    </resultMap>
+    <!--resultMap:手动配置实体属性和表字段的映射关系-->
+    <select id="findOrderNUser" resultMap="orderMap">
+        select * from orders o,user u where o.uid = u.id
+    </select>
+</mapper>

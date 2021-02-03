@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?> <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间，与id组成sql的唯一标识-->
+<mapper namespace="com.lagou.mapper.IUserMapper">
+
+    <!--id:resultMap的名称
+        type:为resultMap的类型
+        associtation:包含的类
+        collection:包含集合类
+    -->
+    <resultMap id="userMap" type="user">
+        <result property="id" column="id"/>
+        <result property="username" column="username"/>
+        <collection property="orderList" ofType="order">
+            <id property="id" column="oid"/>
+            <result property="orderTime" column="ordertime"/>
+            <result property="total" column="total"/>
+        </collection>
+    </resultMap>
+
+
+    <resultMap id="userRoleMap" type="user">
+        <result property="id" column="userid"/>
+        <result property="username" column="username"/>
+        <collection property="roleList" ofType="role">
+            <id property="id" column="roleid"/>
+            <result property="roleName" column="rolename"/>
+        </collection>
+    </resultMap>
+
+
+    <!--resultMap:手动配置实体属性和表字段的映射关系-->
+    <select id="findUserNOrder" useCache="false" resultMap="userMap">
+       select u.*,o.id oid,o.ordertime,o.total,o.uid from user u left join orders o on u.id = o.uid
+    </select>
+
+    <!--resultMap:手动配置实体属性和表字段的映射关系-->
+    <select id="findUserNRole" resultMap="userRoleMap">
+        select * from user u left join user_role ur on u.id = ur.userid
+                                left join role r on r.id = ur.roleid
+    </select>
+
+</mapper>
